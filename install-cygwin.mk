@@ -4,6 +4,9 @@
 #
 # Downloads and cross-compiles GCC and binutils
 # Installs into /usr/os-workshop-gcc
+#
+# CYGWIN-SPECIFIC: removed 'sudo'
+
 
 # The install directory (do not change!)
 export PREFIX ?= /usr/os-workshop-gcc
@@ -20,13 +23,13 @@ SRC_APT := g++ bison flex libgmp3-dev libmpfr-dev libmpc-dev texinfo
 .PHONY: bootstrap setup build-all gcc binutils clean-all clean-binutils clean-gcc uninstall
 
 bootstrap: setup
-	sudo apt install $(SRC_APT)
+	#sudo apt install $(SRC_APT) # apt not supported by cygwin
 	mkdir -p build
 	cd build && $(MAKE) -j 2 -f $(abspath $(CURDIR)/install.mk) build-all
 
 setup: $(PREFIX)
-	sudo mkdir -p $(PREFIX)
-	sudo chmod -R a+rwx /usr/os-workshop-gcc/
+	mkdir -p $(PREFIX)
+	chmod -R a+rwx /usr/os-workshop-gcc/
 
 $(TARGET_GCC).tar.gz:
 	wget ftp://ftp.gnu.org/gnu/gcc/$(TARGET_GCC)/$(TARGET_GCC).tar.gz
@@ -59,9 +62,9 @@ $(PREFIX)/bin/$(TARGET)-gcc: build-gcc/Makefile
 	cd build-gcc && $(MAKE) -j 2 install-gcc
 	cd build-gcc && $(MAKE) -j 2 install-target-libgcc
 
-binutils: setup $(PREFIX)/bin/$(TARGET)-as
+binutils: $(PREFIX)/bin/$(TARGET)-as
 
-gcc: setup $(PREFIX)/bin/$(TARGET)-gcc
+gcc: $(PREFIX)/bin/$(TARGET)-gcc
 
 clean-binutils:
 	rm -rf build/build-binutils
