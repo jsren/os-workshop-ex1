@@ -37,12 +37,10 @@ $(TARGET_BINUTILS).tar.xz:
 	wget https://ftp.gnu.org/gnu/binutils/$(TARGET_BINUTILS).tar.xz
 
 $(TARGET_GCC): $(TARGET_GCC).tar.xz
-	#tar -xJf $(TARGET_GCC).tar.xz
-	echo Tried to untar again!
+	tar -xJf $(TARGET_GCC).tar.xz
 
 $(TARGET_BINUTILS): $(TARGET_BINUTILS).tar.xz
-	#tar -xJf $(TARGET_BINUTILS).tar.xz
-	echo Tried to untar again!
+	tar -xJf $(TARGET_BINUTILS).tar.xz
 
 build-binutils/Makefile: $(TARGET_BINUTILS)
 	mkdir -p build-binutils
